@@ -7,6 +7,8 @@ use App\Models\Category;
 use Illuminate\Support\Facades\Response;
 use App\Http\Requests\CreateCategoryRequest;
 use App\Http\Requests\UpdateCategoryRequest;
+use Illuminate\Support\Facades\Mail;
+use App\Mail\CategoryCreated;
 
 class CategoryController extends Controller
 {
@@ -31,10 +33,17 @@ class CategoryController extends Controller
         $category->name = $request->name;
         $category->description = $request->description;
         $category->save();
-
+        $toEmail = env('INVENTORY_ADMIN_EMAIL');
+        try {
+            Mail::to($toEmail)->send(new CategoryCreated($category));
+            $message = 'Category created and Email sent successfully!';
+        } catch (\Exception $e) {
+            $message = 'Category created But Email failed, reason: '.$e->getMessage();
+        }
         return Response::json([
             'data' => $category,
-            'success' => true
+            'success' => true,
+            'message' => $message
         ], 201);
     }
 
