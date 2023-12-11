@@ -22,11 +22,12 @@ class CreateItemRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'name' => 'required|unique:categories|max:255',
+            'name' => 'required|unique:categories,name|max:255',
             'description' => 'required|min:3',
             'price' => 'required|decimal:0,2',
             'quantity' => 'required|numeric',
-            'category_id' => 'required|numeric|exists:categories,id'
+            'category_id' => 'required|array|min:1',
+            'category_id.*' => 'required|numeric|exists:categories,id'
         ];
     }
 }

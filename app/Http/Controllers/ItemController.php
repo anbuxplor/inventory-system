@@ -41,10 +41,21 @@ class ItemController extends Controller
         $item->quantity = $request->quantity;
         $item->save();
 
-        $catItemAssoc = new CategoryItem;
-        $catItemAssoc->item_id = $item->id;
-        $catItemAssoc->category_id = $request->category_id;
-        $catItemAssoc->save();
+        // Insert/Map multiple categories for the item
+        $itemInsertArr = [];
+        $categories = $request->category_id;
+        foreach($categories as $category) {            
+            $itemInsertArr[] = [
+                'item_id' => $item->id,
+                'category_id' => $category,
+                'created_at' => date('Y-m-d H:i:s'),
+                'updated_at' => date('Y-m-d H:i:s')
+            ];
+        }
+        if(count($itemInsertArr)) {
+            // multiple insert in a single query
+            CategoryItem::insert($itemInsertArr);
+        }
 
         $toEmail = env('INVENTORY_ADMIN_EMAIL');
         try {
@@ -87,11 +98,24 @@ class ItemController extends Controller
         $item->quantity = $request->quantity;
         $item->save();
         
-        $catItemAssoc = CategoryItem::where('item_id', $item->id)->first();
-        $catItemAssoc->item_id = $item->id;
-        $catItemAssoc->category_id = $request->category_id;
-        $catItemAssoc->save();
-                
+        // Delete already mapped categories
+        CategoryItem::where('item_id', $item->id)->delete();
+
+        // Insert data in the mapping table(i.e category_items table)
+        $itemInsertArr = [];
+        $categories = $request->category_id;
+        foreach($categories as $category) {            
+            $itemInsertArr[] = [
+                'item_id' => $item->id,
+                'category_id' => $category,
+                'created_at' => date('Y-m-d H:i:s'),
+                'updated_at' => date('Y-m-d H:i:s')
+            ];
+        }
+        if(count($itemInsertArr)) {
+            CategoryItem::insert($itemInsertArr);
+        }
+
         return Response::json([
             'data' => $item,
             'success' => true,
