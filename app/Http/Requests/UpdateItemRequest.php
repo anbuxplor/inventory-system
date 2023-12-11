@@ -24,8 +24,8 @@ class UpdateItemRequest extends FormRequest
         return [
             'name' => 'required|max:255|unique:items,name,' . $this->item,
             'description' => 'required|min:3',
-            'price' => 'required|decimal:0,2',
-            'quantity' => 'required|numeric',
+            'price' => 'required|decimal:0,2|gte:0',
+            'quantity' => 'required|numeric|gte:0',
             'category_id' => 'required|array|min:1',
             'category_id.*' => 'required|numeric|exists:categories,id'
         ];

@@ -24,7 +24,7 @@ class UpdateCategoryRequest extends FormRequest
     {
         return [
             'name' => 'required|max:255|unique:categories,name,' . $this->category,
-            'description' => 'required'
+            'description' => 'required|min:3'
         ];
     }
 }
