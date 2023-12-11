@@ -20,6 +20,6 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 });
 
 Route::group(['middleware' => ['api_auth']], function () {
-    Route::resource('category', CategoryController::class)->middleware('api_auth');
-    Route::resource('item', ItemController::class)->middleware('api_auth');
+    Route::resource('category', CategoryController::class);
+    Route::resource('item', ItemController::class);
 });
