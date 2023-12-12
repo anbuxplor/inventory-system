@@ -10,6 +10,7 @@ use Illuminate\Support\Facades\Mail;
 use App\Http\Requests\CreateItemRequest;
 use App\Http\Requests\UpdateItemRequest;
 use App\Mail\ItemCreated;
+use App\Mail\ItemDeleted;
 
 class ItemController extends Controller
 {
@@ -58,8 +59,12 @@ class ItemController extends Controller
         }
 
         $toEmail = env('INVENTORY_ADMIN_EMAIL');
+        $ccUsers = explode(',', env('INVENTORY_TEAM_EMAILS'));
         try {
-            Mail::to($toEmail)->send(new ItemCreated($item));
+            $item->is_created = true;
+            Mail::to($toEmail)
+                ->cc($ccUsers)
+                ->send(new ItemCreated($item));
             $message = 'Item created and Email sent successfully!';
         } catch (\Exception $e) {
             $message = 'Item created But Email failed, reason: '.$e->getMessage();
@@ -115,11 +120,21 @@ class ItemController extends Controller
         if(count($itemInsertArr)) {
             CategoryItem::insert($itemInsertArr);
         }
-
+        $toEmail = env('INVENTORY_ADMIN_EMAIL');
+        $ccUsers = explode(',', env('INVENTORY_TEAM_EMAILS'));
+        try {
+            $item->is_created = false;
+            Mail::to($toEmail)
+                ->cc($ccUsers)
+                ->send(new ItemCreated($item));
+            $message = 'Item updated and Email sent successfully!';
+        } catch (\Exception $e) {
+            $message = 'Item updated But Email failed, reason: '.$e->getMessage();
+        }
         return Response::json([
             'data' => $item,
             'success' => true,
-            'message' => 'Item updated successfully'
+            'message' => $message
         ]);
     }
 
@@ -133,11 +148,25 @@ class ItemController extends Controller
     {
         $item = Item::find($id);
         if ($item) {
+            $itemDetails = $item;
             $item->delete();
+                       
+            $toEmail = env('INVENTORY_ADMIN_EMAIL');
+            $ccUsers = explode(',', env('INVENTORY_TEAM_EMAILS'));
+            try {
+                Mail::to($toEmail)
+                    ->cc($ccUsers)
+                    ->send(new ItemDeleted($itemDetails));
+                $message = 'Item deleted and Email sent successfully!';
+            } catch (\Exception $e) {
+                $message = 'Item deleted But Email failed, reason: '.$e->getMessage();
+            }
+
             return Response::json([
-                'message' => 'Item deleted successfully',
+                'message' => $message,
                 'success' => true
             ]);
+
         } else {
             return Response::json([
                 'message' => 'Item delete failed, Item not found.',

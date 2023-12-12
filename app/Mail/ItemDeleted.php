@@ -10,7 +10,7 @@ use Illuminate\Mail\Mailables\Envelope;
 use Illuminate\Queue\SerializesModels;
 use App\Models\Item;
 
-class ItemCreated extends Mailable
+class ItemDeleted extends Mailable
 {
     use Queueable, SerializesModels;
 
@@ -29,10 +29,8 @@ class ItemCreated extends Mailable
      */
     public function envelope(): Envelope
     {
-        $subject = ($this->item->is_created) ? 'New Item Created ' : 'Updated an item ';
-        $subject = $subject.' - '.$this->item->name;
         return new Envelope(
-            subject: $subject,
+            subject: 'Item Deleted - '.$this->item->name,
         );
     }
 
@@ -42,7 +40,7 @@ class ItemCreated extends Mailable
     public function content(): Content
     {
         return new Content(
-            markdown: 'emails.items.created',
+            markdown: 'emails.items.deleted',
         );
     }
 

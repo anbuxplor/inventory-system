@@ -1,9 +1,6 @@
 <x-mail::message>
-@if($item->is_created)
-# New item created.
-@else
-# Item updated 
-@endif
+# Item Deleted
+
 
 <p>Item details: </p>
 <div>
@@ -12,10 +9,13 @@
     Price: {{ $item->description }} <br>
     Quantity: {{ $item->description }} <br>
     Created at: {{ $item->created_at }} <br>
-    Updated at: {{ $item->updated_at }} <br>
+    Last updated at: {{ $item->updated_at }} <br>
+    Deleted at: {{ date('Y-m-d H:i:s') }} <br>
 </div>
-
 <br>
+<!-- <x-mail::button :url="''">
+Button Text
+</x-mail::button> -->
 
 Thanks,<br>
 {{ config('app.name') }}
