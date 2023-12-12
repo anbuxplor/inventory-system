@@ -61,7 +61,9 @@ If the token is not valid the APIs will show error as **Unauthorized access**.
 | Request Header    |                   |                            |
 | :---------------  | :------------     | :------------------------- |
 | `Accept`          | `application/json`   | **Required**.              |
-
+```diff
+- Note: These headers are mandatory to access all APIs.
+```
 
 ### Get all categories
 
@@ -80,15 +82,15 @@ List API returns a JSON response in the following format:
             "id": 1,
             "name": "category 01",
             "description": "desc",
-            "created_at": "2023-12-11T09:08:35.000000Z",
-            "updated_at": "2023-12-11T09:08:35.000000Z"
+            "created_at": "2023-12-11 09:08:35",
+            "updated_at": "2023-12-11 09:08:35"
         },
         {
             "id": 2,
             "name": "category 02",
             "description": "demo desc..",
-            "created_at": "2023-12-11T09:31:38.000000Z",
-            "updated_at": "2023-12-12T05:14:45.000000Z"
+            "created_at": "2023-12-11 09:31:38",
+            "updated_at": "2023-12-12 05:14:45"
         }
     ],
     "success": true
@@ -107,8 +109,8 @@ in URL pass the valid {{category_id}}
         "id": 3,
         "name": "My category",
         "description": "demo",
-        "created_at": "2023-12-11T09:31:38.000000Z",
-        "updated_at": "2023-12-12T05:14:45.000000Z"
+        "created_at": "2023-12-11 09:31:38",
+        "updated_at": "2023-12-12 05:14:45"
     },
     "success": true
 }
@@ -132,8 +134,8 @@ in URL pass the valid {{category_id}}
     "data": {
         "name": "Category 2",
         "description": "demo desc",
-        "updated_at": "2023-12-12T02:38:47.000000Z",
-        "created_at": "2023-12-12T02:38:47.000000Z",
+        "updated_at": "2023-12-12 02:38:47",
+        "created_at": "2023-12-12 02:38:47",
         "id": 12
     },
     "success": true,
@@ -160,8 +162,8 @@ in URL pass the valid {{category_id}}
     "data": {
         "name": "Category name",
         "description": "demo desc",
-        "updated_at": "2023-12-12T02:38:47.000000Z",
-        "created_at": "2023-12-12T02:38:47.000000Z",
+        "updated_at": "2023-12-12 02:38:47",
+        "created_at": "2023-12-12 02:38:47",
         "id": 12 /* {{category_id}} */
     },
     "success": true,
@@ -292,8 +294,8 @@ in URL pass the valid {{item_id}}
         "description": "222",
         "price": "200.00",
         "quantity": 20,
-        "updated_at": "2023-12-12T06:25:23.000000Z",
-        "created_at": "2023-12-12T06:25:23.000000Z",
+        "updated_at": "2023-12-12T06:25:23",
+        "created_at": "2023-12-12T06:25:23",
         "id": 29
     },
     "success": true,
@@ -326,8 +328,8 @@ in URL pass the valid {{item_id}}
         "description": "222",
         "price": "30.00",
         "quantity": 10,
-        "created_at": "2023-12-12T06:25:23.000000Z",
-        "updated_at": "2023-12-12T06:27:39.000000Z"
+        "created_at": "2023-12-12T06:25:23",
+        "updated_at": "2023-12-12T06:27:39"
     },
     "success": true,
     "message": "Item updated and Email sent successfully!"

@@ -22,7 +22,7 @@ class ItemController extends Controller
     {
         // Get and display all the items with associated categories
         $items = Item::with(['category.info'])->orderBy('id', 'DESC')->get();
-        
+
         return Response::json([
             'data' => ItemResource::collection($items),
             'success' => true
@@ -47,7 +47,7 @@ class ItemController extends Controller
         // Insert/Map multiple categories for the item
         $itemInsertArr = [];
         $categories = $request->category_id;
-        foreach($categories as $category) {            
+        foreach ($categories as $category) {
             $itemInsertArr[] = [
                 'item_id' => $item->id,
                 'category_id' => $category,
@@ -55,7 +55,7 @@ class ItemController extends Controller
                 'updated_at' => date('Y-m-d H:i:s')
             ];
         }
-        if(count($itemInsertArr)) {
+        if (count($itemInsertArr)) {
             // multiple insert in a single query
             CategoryItem::insert($itemInsertArr);
         }
@@ -70,7 +70,7 @@ class ItemController extends Controller
             $message = 'Item created and Email sent successfully!';
             unset($item->is_created);
         } catch (\Exception $e) {
-            $message = 'Item created But Email failed, reason: '.$e->getMessage();
+            $message = 'Item created But Email failed, reason: ' . $e->getMessage();
         }
         return Response::json([
             'data' => $item,
@@ -100,7 +100,7 @@ class ItemController extends Controller
     public function update(UpdateItemRequest $request, string $id)
     {
         $item = Item::find($id);
-        if(!$item) {
+        if (!$item) {
             return Response::json([
                 'data' => $item,
                 'success' => false,
@@ -112,14 +112,14 @@ class ItemController extends Controller
         $item->price = $request->price;
         $item->quantity = $request->quantity;
         $item->save();
-        
+
         // Delete already mapped categories
         CategoryItem::where('item_id', $item->id)->delete();
 
         // Insert data in the mapping table(i.e category_items table)
         $itemInsertArr = [];
         $categories = $request->category_id;
-        foreach($categories as $category) {            
+        foreach ($categories as $category) {
             $itemInsertArr[] = [
                 'item_id' => $item->id,
                 'category_id' => $category,
@@ -127,7 +127,7 @@ class ItemController extends Controller
                 'updated_at' => date('Y-m-d H:i:s')
             ];
         }
-        if(count($itemInsertArr)) {
+        if (count($itemInsertArr)) {
             CategoryItem::insert($itemInsertArr);
         }
         $toEmail = env('INVENTORY_ADMIN_EMAIL');
@@ -140,7 +140,7 @@ class ItemController extends Controller
             $message = 'Item updated and Email sent successfully!';
             unset($item->is_created);
         } catch (\Exception $e) {
-            $message = 'Item updated But Email failed, reason: '.$e->getMessage();
+            $message = 'Item updated But Email failed, reason: ' . $e->getMessage();
         }
         return Response::json([
             'data' => $item,
@@ -161,7 +161,7 @@ class ItemController extends Controller
         if ($item) {
             $itemDetails = $item;
             $item->delete();
-                       
+
             $toEmail = env('INVENTORY_ADMIN_EMAIL');
             $ccUsers = explode(',', env('INVENTORY_TEAM_EMAILS'));
             try {
@@ -170,14 +170,13 @@ class ItemController extends Controller
                     ->send(new ItemDeleted($itemDetails));
                 $message = 'Item deleted and Email sent successfully!';
             } catch (\Exception $e) {
-                $message = 'Item deleted But Email failed, reason: '.$e->getMessage();
+                $message = 'Item deleted But Email failed, reason: ' . $e->getMessage();
             }
 
             return Response::json([
                 'message' => $message,
                 'success' => true
             ]);
-
         } else {
             return Response::json([
                 'message' => 'Item delete failed, Item not found.',

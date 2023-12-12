@@ -7,8 +7,7 @@ use App\Models\Category;
 use Illuminate\Support\Facades\Response;
 use App\Http\Requests\CreateCategoryRequest;
 use App\Http\Requests\UpdateCategoryRequest;
-use Illuminate\Support\Facades\Mail;
-use App\Mail\CategoryCreated;
+use App\Http\Resources\CategoryResource;
 
 class CategoryController extends Controller
 {
@@ -19,7 +18,7 @@ class CategoryController extends Controller
     {
         $category = Category::orderBy('id', 'DESC')->get();
         return Response::json([
-            'data' => $category,
+            'data' => CategoryResource::collection($category),
             'success' => true
         ]);
     }
@@ -33,15 +32,8 @@ class CategoryController extends Controller
         $category->name = $request->name;
         $category->description = $request->description;
         $category->save();
-        // $toEmail = env('INVENTORY_ADMIN_EMAIL', 'anbu.ayyakannu@xplortechnologies.com');
-        // try {
-        //     Mail::to($toEmail)->send(new CategoryCreated($category));
-        //     $message = 'Category created and Email sent successfully!';
-        // } catch (\Exception $e) {
-        //     $message = 'Category created But Email failed, reason: '.$e->getMessage();
-        // }
         return Response::json([
-            'data' => $category,
+            'data' => new CategoryResource($category),
             'success' => true,
             'message' => "Category created successfully"
         ], 201);
@@ -56,7 +48,7 @@ class CategoryController extends Controller
 
         if ($category) {
             return Response::json([
-                'data' => $category,
+                'data' => new CategoryResource($category),
                 'success' => true
             ]);
         } else {
@@ -80,7 +72,7 @@ class CategoryController extends Controller
             $category->save();
 
             return Response::json([
-                'data' => $category,
+                'data' => new CategoryResource($category),
                 'success' => true,
                 'message' => 'Category updated successfully'
             ]);
