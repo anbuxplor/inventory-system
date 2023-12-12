@@ -10,10 +10,8 @@ use Tests\TestCase;
 
 class ItemManagementTest extends TestCase
 {
-    // private $API_HEADERS = 'anbuxplor';
-
     private $API_HEADERS = [
-        'Authorization' => 'Bearer anbuxplor',
+        'Authorization' => 'Bearer xplor_inv_api',
         'Accept' => 'application/json'
     ];
 
@@ -34,7 +32,7 @@ class ItemManagementTest extends TestCase
         $categories = Category::pluck('id');
         $response = $this->withHeaders($this->API_HEADERS)
             ->postJson('/api/item', [
-                'name' => 'Test item - ' . uniqid(),
+                'name' => fake()->name(),
                 'description' => 'Test description',
                 'price' => 200.00,
                 'quantity' => 50,
@@ -53,7 +51,7 @@ class ItemManagementTest extends TestCase
         $categories = Category::pluck('id')->first();
         $response = $this->withHeaders($this->API_HEADERS)
             ->put('/api/item/' . $item->id, [
-                'name' => 'Test category - ' . uniqid(),
+                'name' => fake()->name(),
                 'description' => 'Test description updated',
                 'price' => 200.00,
                 'quantity' => 501,
@@ -67,13 +65,14 @@ class ItemManagementTest extends TestCase
      */
     public function test_update_not_found_item_data_api()
     {
+        $categories = Category::pluck('id')->first();
         $response = $this->withHeaders($this->API_HEADERS)
             ->put('/api/item/100000', [
-            'name' => 'Test category - ' . uniqid(),
+            'name' => fake()->name(),
             'description' => 'Test description updated',
             'price' => 200.00,
             'quantity' => 50,
-            'category_id' => [1]
+            'category_id' => [$categories]
         ]);
         $response->assertStatus(404);
     }
