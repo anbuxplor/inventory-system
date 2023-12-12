@@ -71,7 +71,7 @@ If the token is not valid the APIs will show error as **Unauthorized access**.
 #### Request Params: NA
 
 #### Responses
-GList API returns a JSON response in the following format:
+List API returns a JSON response in the following format:
 
 ```javascript
 {
@@ -94,6 +94,26 @@ GList API returns a JSON response in the following format:
     "success": true
 }
 ```
+#### Get a category
+
+```http
+  GET {{base_url}}/api/category/{{category_id}}
+```
+#### Request Params:
+in URL pass the valid {{category_id}}
+```javascript
+{
+    "data": {
+        "id": 3,
+        "name": "My category",
+        "description": "demo",
+        "created_at": "2023-12-11T09:31:38.000000Z",
+        "updated_at": "2023-12-12T05:14:45.000000Z"
+    },
+    "success": true
+}
+```
+
 
 #### Create a category
 
@@ -184,36 +204,18 @@ List API returns a JSON response in the following format:
             "description": "Test description",
             "price": "200.00",
             "quantity": 501,
-            "created_at": "2023-12-11T09:09:28.000000Z",
-            "updated_at": "2023-12-12T03:34:21.000000Z",
-            "category": [
-                {
-                    "id": 1,
-                    "item_id": 1,
-                    "category_id": 2,
-                    "created_at": "2023-12-12T03:34:21.000000Z",
-                    "updated_at": "2023-12-12T03:34:21.000000Z",
-                    "info": {
-                        "id": 2,
-                        "name": "category 02",
-                        "description": "desc",
-                        "created_at": "2023-12-11T09:08:35.000000Z",
-                        "updated_at": "2023-12-11T09:08:35.000000Z"
-                    }
-                },
+            "created_at": "2023-12-12 03:29:00",
+            "updated_at": "2023-12-12 03:29:00",
+            "categories": [
                 {
                     "id": 2,
-                    "item_id": 1,
-                    "category_id": 4,
-                    "created_at": "2023-12-12T03:32:24.000000Z",
-                    "updated_at": "2023-12-12T03:32:24.000000Z",
-                    "info": {
-                        "id": 4,
-                        "name": "Test category1",
-                        "description": "Test description",
-                        "created_at": "2023-12-11T10:51:25.000000Z",
-                        "updated_at": "2023-12-11T10:51:25.000000Z"
-                    }
+                    "name": "category 02",
+                    "description": "desc"
+                },
+                {
+                    "id": 4,
+                    "name": "Test category1",
+                    "description": "Test description"
                 }
             ]
         },
@@ -223,27 +225,47 @@ List API returns a JSON response in the following format:
             "description": "222",
             "price": "30.00",
             "quantity": 0,
-            "created_at": "2023-12-11T09:23:16.000000Z",
-            "updated_at": "2023-12-11T09:23:16.000000Z",
+            "created_at": "2023-12-12 03:29:34",
+            "updated_at": "2023-12-12 03:29:34",
             "category": [
                 {
-                    "id": 4,
-                    "item_id": 2,
-                    "category_id": 2,
-                    "created_at": "2023-12-11T09:23:16.000000Z",
-                    "updated_at": "2023-12-11T09:23:16.000000Z",
-                    "info": {
-                        "id": 2,
-                        "name": "category 02",
-                        "description": "desc",
-                        "created_at": "2023-12-11T09:08:35.000000Z",
-                        "updated_at": "2023-12-11T09:08:35.000000Z"
-                    }
+                    "id": 2,
+                    "name": "category 02",
+                    "description": "desc",
                 }
             ]
         },
         
     ],
+    "success": true
+}
+```
+
+#### Get an Item
+
+```http
+  GET {{base_url}}/api/item/{{item_id}}
+```
+#### Request Params:
+in URL pass the valid {{item_id}}
+```javascript
+{
+    "data": {
+        "id": 29,
+        "name": "item 2121",
+        "description": "222",
+        "price": "30.00",
+        "quantity": 10,
+        "categories": [
+            {
+                "id": 2,
+                "name": "cat 02",
+                "description": "desc"
+            }
+        ],
+        "created_at": "2023-12-12 06:25:23",
+        "updated_at": "2023-12-12 06:27:39"
+    },
     "success": true
 }
 ```

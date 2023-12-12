@@ -9,6 +9,7 @@ use Illuminate\Support\Facades\Response;
 use Illuminate\Support\Facades\Mail;
 use App\Http\Requests\CreateItemRequest;
 use App\Http\Requests\UpdateItemRequest;
+use App\Http\Resources\ItemResource;
 use App\Mail\ItemCreated;
 use App\Mail\ItemDeleted;
 
@@ -20,9 +21,10 @@ class ItemController extends Controller
     public function index(Request $request)
     {
         // Get and display all the items with associated categories
-        $items = Item::with(['category.info'])->get();
+        $items = Item::with(['category.info'])->orderBy('id', 'DESC')->get();
+        
         return Response::json([
-            'data' => $items,
+            'data' => ItemResource::collection($items),
             'success' => true
         ]);
     }
@@ -66,6 +68,7 @@ class ItemController extends Controller
                 ->cc($ccUsers)
                 ->send(new ItemCreated($item));
             $message = 'Item created and Email sent successfully!';
+            unset($item->is_created);
         } catch (\Exception $e) {
             $message = 'Item created But Email failed, reason: '.$e->getMessage();
         }
@@ -84,7 +87,7 @@ class ItemController extends Controller
         // Get the item info with mapped categories
         $item = Item::with(['category.info'])->find($id);
         return Response::json([
-            'data' => $item,
+            'data' => new ItemResource($item),
             'success' => true
         ]);
     }
@@ -135,6 +138,7 @@ class ItemController extends Controller
                 ->cc($ccUsers)
                 ->send(new ItemCreated($item));
             $message = 'Item updated and Email sent successfully!';
+            unset($item->is_created);
         } catch (\Exception $e) {
             $message = 'Item updated But Email failed, reason: '.$e->getMessage();
         }
