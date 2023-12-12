@@ -81,7 +81,8 @@ class CategoryController extends Controller
 
             return Response::json([
                 'data' => $category,
-                'success' => true
+                'success' => true,
+                'message' => 'Category updated successfully'
             ]);
         } else {
             return Response::json([
@@ -101,7 +102,7 @@ class CategoryController extends Controller
         if ($category) {
             $category->delete();
             return Response::json([
-                'message' => 'Deleted successfully',
+                'message' => 'Category deleted successfully',
                 'success' => true
             ]);
         } else {
