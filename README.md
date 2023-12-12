@@ -349,3 +349,17 @@ in URL pass the valid {{item_id}}
     "success": true
 }
 ```
+
+## Status Codes
+
+Xplor Inventory API returns the following status codes in its API:
+
+| Status Code | Description |
+| :--- | :--- |
+| 200 | `OK` |
+| 201 | `CREATED` |
+| 403 | `UNAUTHORIZED ACCESS` |
+| 422 | `UNPROCESSABLE INPUT / VALIDATION ERRORS` |
+| 400 | `BAD REQUEST` |
+| 404 | `NOT FOUND` |
+| 500 | `INTERNAL SERVER ERROR` |
