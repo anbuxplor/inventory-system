@@ -97,6 +97,13 @@ class ItemController extends Controller
     public function update(UpdateItemRequest $request, string $id)
     {
         $item = Item::find($id);
+        if(!$item) {
+            return Response::json([
+                'data' => $item,
+                'success' => false,
+                'message' => 'Item not found'
+            ], 404);
+        }
         $item->name = $request->name;
         $item->description = $request->description;
         $item->price = $request->price;
