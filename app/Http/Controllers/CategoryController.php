@@ -8,6 +8,8 @@ use Illuminate\Support\Facades\Response;
 use App\Http\Requests\CreateCategoryRequest;
 use App\Http\Requests\UpdateCategoryRequest;
 use App\Http\Resources\CategoryResource;
+use App\Models\CategoryItem;
+use App\Models\Item;
 
 class CategoryController extends Controller
 {
@@ -90,16 +92,24 @@ class CategoryController extends Controller
      */
     public function destroy(string $id)
     {
+        // check if the category is associated with any items
+        $associatedItems = CategoryItem::where('category_id', $id)->first();
         $category = Category::find($id);
-        if ($category) {
+        if (!$associatedItems && $category) {
             $category->delete();
             return Response::json([
                 'message' => 'Category deleted successfully',
                 'success' => true
             ]);
         } else {
+            $message = 'Delete failed, ';
+            if($associatedItems) {
+                $message .= 'Category is associated with a category.';
+            } else {
+                $message .= 'Category not found.';
+            }
             return Response::json([
-                'message' => 'Delete failed, Category not found.',
+                'message' => $message,
                 'success' => false
             ], 400);
         }

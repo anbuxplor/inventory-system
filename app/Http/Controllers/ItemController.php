@@ -86,6 +86,13 @@ class ItemController extends Controller
     {
         // Get the item info with mapped categories
         $item = Item::with(['category.info'])->find($id);
+        if(!$item) {
+            return Response::json([
+                'data' => $item,
+                'success' => false,
+                'message' => 'not found'
+            ], 404);
+        }
         return Response::json([
             'data' => new ItemResource($item),
             'success' => true
