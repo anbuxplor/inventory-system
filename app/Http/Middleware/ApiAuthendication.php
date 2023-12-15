@@ -21,7 +21,7 @@ class ApiAuthendication
     public function handle(Request $request, Closure $next): Response
     {
         $token = $request->bearerToken();
-        if ($token == env('XPLOR_API_TOKEN', 'xplor_inv_api')) {
+        if ($token && $token == env('XPLOR_API_TOKEN', 'xplor_inv_api')) {
             return $next($request);
         } else {
             return response([
